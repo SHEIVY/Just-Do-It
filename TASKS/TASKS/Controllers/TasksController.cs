@@ -19,9 +19,9 @@ namespace TASKS.Controllers
             _taskService = taskService;
         }
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll([FromQuery] int userId)
         {
-            var tasks = await _taskService.GetAllTasks();
+            var tasks = await _taskService.GetAllTasks(userId);
 
             return Ok(tasks);
         }

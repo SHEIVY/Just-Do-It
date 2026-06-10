@@ -16,6 +16,7 @@ import {
 import TaskCard from "../components/tasks/TaskCard";
 import TaskForm from "../components/tasks/TaskForm";
 import ConfirmDialog from "../components/common/ConfirmDialog";
+import { useAppSelector } from "../store/hooks";
 
 function Dashboard({ filter }) {
 
@@ -29,6 +30,7 @@ function Dashboard({ filter }) {
   // Delete dialog
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
+  const currentUser = useAppSelector((state) => state.user.currentUser);
 
   // =========================
   // Load tasks
@@ -54,17 +56,26 @@ function Dashboard({ filter }) {
   // =========================
   const handleSubmit = async (task) => {
     try {
+      const payload = {
+        title: task.title,
+        description: task.description,
+        status: task.status,
+      };
+
+      const userId = task.userId ?? currentUser?.id;
+      if (userId) {
+        payload.userId = userId;
+      }
 
       if (task.id) {
-        await updateTask(task.id, task);
+        await updateTask(task.id, payload);
       } else {
-        await createTask(task);
+        await createTask(payload);
       }
 
       setFormOpen(false);
       setEditTask(null);
       loadTasks();
-
     } catch (err) {
       console.log(err);
     }

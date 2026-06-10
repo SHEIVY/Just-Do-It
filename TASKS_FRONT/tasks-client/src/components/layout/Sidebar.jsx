@@ -8,11 +8,13 @@ import {
     Typography,
     Box,
 } from "@mui/material";
+import { NavLink, useLocation } from "react-router-dom";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PendingActionsIcon from "@mui/icons-material/PendingActions";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import PeopleIcon from "@mui/icons-material/People";
 
 const drawerWidth = 240;
 
@@ -20,6 +22,9 @@ function Sidebar({
     filter,
     setFilter,
 }) {
+    const location = useLocation();
+    const isUsersRoute = location.pathname.startsWith("/users");
+
     return (
         <Drawer
             variant="permanent"
@@ -49,7 +54,7 @@ function Sidebar({
                 <List>
 
                     <ListItemButton
-                        selected={filter === "all"}
+                        selected={filter === "all" && !isUsersRoute}
                         onClick={() => setFilter("all")}
                     >
                         <ListItemIcon>
@@ -60,7 +65,7 @@ function Sidebar({
                     </ListItemButton>
 
                     <ListItemButton
-                        selected={filter === "todo"}
+                        selected={filter === "todo" && !isUsersRoute}
                         onClick={() => setFilter("todo")}
                     >
                         <ListItemIcon>
@@ -71,7 +76,7 @@ function Sidebar({
                     </ListItemButton>
 
                     <ListItemButton
-                        selected={filter === "inprogress"}
+                        selected={filter === "inprogress" && !isUsersRoute}
                         onClick={() => setFilter("inprogress")}
                     >
                         <ListItemIcon>
@@ -82,7 +87,7 @@ function Sidebar({
                     </ListItemButton>
 
                     <ListItemButton
-                        selected={filter === "done"}
+                        selected={filter === "done" && !isUsersRoute}
                         onClick={() => setFilter("done")}
                     >
                         <ListItemIcon>
@@ -90,6 +95,17 @@ function Sidebar({
                         </ListItemIcon>
 
                         <ListItemText primary="הושלם" />
+                    </ListItemButton>
+
+                    <ListItemButton
+                        component={NavLink}
+                        to="/users"
+                        selected={isUsersRoute}
+                    >
+                        <ListItemIcon>
+                            <PeopleIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="משתמשים" />
                     </ListItemButton>
 
                 </List>

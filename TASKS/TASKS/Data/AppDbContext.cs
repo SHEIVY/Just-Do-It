@@ -11,5 +11,6 @@ namespace TASKS.Data
         }
 
         public DbSet<Models.TaskItem> Tasks { get; set; }
+        public DbSet<User> Users { get; set; }
     }
 }

@@ -11,17 +11,12 @@ import {
 import { NavLink, useLocation } from "react-router-dom";
 
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import PendingActionsIcon from "@mui/icons-material/PendingActions";
-import AutorenewIcon from "@mui/icons-material/Autorenew";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import PeopleIcon from "@mui/icons-material/People";
 
 const drawerWidth = 240;
 
-function Sidebar({
-    filter,
-    setFilter,
-}) {
+
+function Sidebar() {
     const location = useLocation();
     const isUsersRoute = location.pathname.startsWith("/users");
 
@@ -54,47 +49,15 @@ function Sidebar({
                 <List>
 
                     <ListItemButton
-                        selected={filter === "all" && !isUsersRoute}
-                        onClick={() => setFilter("all")}
+                        component={NavLink}
+                        to="/"
+                        selected={!isUsersRoute && location.pathname === "/"}
                     >
                         <ListItemIcon>
                             <DashboardIcon />
                         </ListItemIcon>
 
                         <ListItemText primary="כל המשימות" />
-                    </ListItemButton>
-
-                    <ListItemButton
-                        selected={filter === "todo" && !isUsersRoute}
-                        onClick={() => setFilter("todo")}
-                    >
-                        <ListItemIcon>
-                            <PendingActionsIcon />
-                        </ListItemIcon>
-
-                        <ListItemText primary="לביצוע" />
-                    </ListItemButton>
-
-                    <ListItemButton
-                        selected={filter === "inprogress" && !isUsersRoute}
-                        onClick={() => setFilter("inprogress")}
-                    >
-                        <ListItemIcon>
-                            <AutorenewIcon />
-                        </ListItemIcon>
-
-                        <ListItemText primary="בתהליך" />
-                    </ListItemButton>
-
-                    <ListItemButton
-                        selected={filter === "done" && !isUsersRoute}
-                        onClick={() => setFilter("done")}
-                    >
-                        <ListItemIcon>
-                            <CheckCircleIcon />
-                        </ListItemIcon>
-
-                        <ListItemText primary="הושלם" />
                     </ListItemButton>
 
                     <ListItemButton

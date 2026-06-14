@@ -4,26 +4,16 @@ import Sidebar from "./Sidebar";
 import Navbar from "./Navbar";
 
 const SIDEBAR_WIDTH = 100;
-function MainLayout({
-    children,
-    filter,
-    setFilter,
-}) {
+function MainLayout({ children }) {
     return (
         <Box sx={{ display: "flex", minHeight: "100vh" }}>
 
             <Box sx={{ width: SIDEBAR_WIDTH, flexShrink: 0 }}>
-                <Sidebar
-                    filter={filter}
-                    setFilter={setFilter}
-                />
+                <Sidebar />
             </Box>
             <Box sx={{ width: SIDEBAR_WIDTH, flexShrink: 0 }}>
                 <Navbar />
             </Box>
-
-
-
 
             <Box
                 component="main"
@@ -36,8 +26,6 @@ function MainLayout({
                     minHeight: "100vh",
                 }}
             >
-                    {/* <Toolbar /> */}
-
                     {children}
             </Box>
         </Box>

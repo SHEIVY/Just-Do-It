@@ -22,7 +22,7 @@ namespace TASKS.Models
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        public string Password { get; set; } = string.Empty;
+        public string PasswordHash { get; set; } = string.Empty;
 
         // One user can have many tasks
         public ICollection<TaskItem> Tasks { get; set; } = new List<TaskItem>();

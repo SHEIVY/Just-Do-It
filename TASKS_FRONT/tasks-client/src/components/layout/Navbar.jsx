@@ -4,9 +4,23 @@ import {
   Typography,
   Box,
   Avatar,
+  Button,
 } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "../../store/hooks";
+import { clearAuth } from "../../store/userSlice";
 
 function Navbar() {
+  const currentUser = useAppSelector((state) => state.user.currentUser);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearAuth());
+    navigate("/login");
+  };
+
   return (
     <AppBar
       position="fixed"
@@ -33,12 +47,21 @@ function Navbar() {
 
           <Box display="flex" alignItems="center" gap={2}>
             <Typography>
-              שלום אלישבע 👋
+              שלום {currentUser?.firstName} 👋
             </Typography>
 
-            <Avatar>
-              E
+            <Avatar sx={{ bgcolor: '#1976d2' }}>
+              {currentUser?.firstName?.charAt(0)?.toUpperCase()}
             </Avatar>
+
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleLogout}
+              sx={{ ml: 2 }}
+            >
+              התנתקות
+            </Button>
           </Box>
 
         </Box>

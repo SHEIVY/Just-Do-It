@@ -19,6 +19,12 @@ namespace TASKS.Services
         {
             return await _context.Tasks.Where(t => t.UserId == userId).ToListAsync();
         }
+
+        public async Task<TaskItem?> GetTaskById(int id)
+        {
+            return await _context.Tasks.FindAsync(id);
+        }
+
         public async Task<PagedResult<TaskDto>> GetAllTasks_(
           string? search,
           string? status,

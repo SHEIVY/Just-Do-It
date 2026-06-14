@@ -1,8 +1,31 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TASKS.Data;
 using TASKS.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// ===== JWT Authentication =====
+var jwtSettings = builder.Configuration.GetSection("Jwt");
+var secretKey = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]);
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(secretKey),
+            ValidateIssuer = true,
+            ValidIssuer = jwtSettings["Issuer"],
+            ValidateAudience = true,
+            ValidAudience = jwtSettings["Audience"],
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
 
 // CORS (React)
 builder.Services.AddCors(options =>
@@ -32,9 +55,11 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-// ❗ חשוב: קודם CORS
+// ❗ חשוב: קודם CORS, אחרי כן Authentication
 app.UseCors("AllowAll");
 
+// Add JWT middleware
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

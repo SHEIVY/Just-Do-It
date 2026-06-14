@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-
 import {
     Dialog,
     DialogTitle,
@@ -36,6 +35,7 @@ function TaskForm({
     const handleSubmit = () => {
 
         if (initialData?.id) {
+            // Editing existing task
             onSubmit({
                 id: initialData.id,
                 title,
@@ -43,6 +43,9 @@ function TaskForm({
                 status,
             });
         } else {
+            // Creating new task
+            // IMPORTANT: Do NOT send userId
+            // Backend extracts userId from JWT token and assigns it automatically
             onSubmit({
                 title,
                 description,
@@ -112,3 +115,4 @@ function TaskForm({
 }
 
 export default TaskForm;
+

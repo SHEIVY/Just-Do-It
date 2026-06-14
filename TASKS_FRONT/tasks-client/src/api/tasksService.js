@@ -1,18 +1,53 @@
 import axios from "axios";
-const API_URL = "http://localhost:5154/api/Tasks";
-export const getTasks = () => {
-  return axios.get(API_URL);
+
+const api = axios.create({
+  baseURL: "http://localhost:5154/api",
+});
+
+// Add JWT token to all requests automatically
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+// Get all tasks for the logged-in user
+// Backend extracts user ID from JWT token and returns only that user's tasks
+export const getTasks = (page = 1, pageSize = 10) => {
+  return api.get("/tasks", {
+    params: { page, pageSize },
+  });
 };
 
+// Get task by ID
+export const getTaskById = (id) => {
+  return api.get(`/tasks/${id}`);
+};
+
+// Create task
+// IMPORTANT: DO NOT send userId from frontend
+// Backend extracts userId from JWT token and assigns it automatically
 export const createTask = (task) => {
-  return axios.post(API_URL, task);
+  const { title, description, status } = task;
+  return api.post("/tasks", {
+    title,
+    description,
+    status,
+  });
 };
 
-export const deleteTask = (id) => {
-  return axios.delete(`${API_URL}/${id}`);
-};
-
+// Update task - backend verifies ownership via JWT + task userId
 export const updateTask = (id, task) => {
-  return axios.put(`${API_URL}/${id}`, task);
+  return api.put(`/tasks/${id}`, task);
+};
+
+// Delete task - backend verifies ownership via JWT + task userId
+export const deleteTask = (id) => {
+  return api.delete(`/tasks/${id}`);
 };
 

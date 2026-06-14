@@ -16,9 +16,8 @@ import {
 import TaskCard from "../components/tasks/TaskCard";
 import TaskForm from "../components/tasks/TaskForm";
 import ConfirmDialog from "../components/common/ConfirmDialog";
-import { useAppSelector } from "../store/hooks";
 
-function Dashboard({ filter }) {
+function Dashboard() {
 
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -30,7 +29,6 @@ function Dashboard({ filter }) {
   // Delete dialog
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-  const currentUser = useAppSelector((state) => state.user.currentUser);
 
   // =========================
   // Load tasks
@@ -62,14 +60,10 @@ function Dashboard({ filter }) {
         status: task.status,
       };
 
-      const userId = task.userId ?? currentUser?.id;
-      if (userId) {
-        payload.userId = userId;
-      }
-
       if (task.id) {
         await updateTask(task.id, payload);
       } else {
+        // Backend extracts userId from JWT token automatically
         await createTask(payload);
       }
 
@@ -111,19 +105,6 @@ function Dashboard({ filter }) {
   };
 
   // =========================
-  // Filter
-  // =========================
-  const filteredTasks = tasks.filter((task) => {
-
-    if (filter === "all") return true;
-    if (filter === "todo") return task.status === 0;
-    if (filter === "inprogress") return task.status === 1;
-    if (filter === "done") return task.status === 2;
-
-    return true;
-  });
-
-  // =========================
   // Loading
   // =========================
   if (loading) {
@@ -157,12 +138,12 @@ function Dashboard({ filter }) {
       {/* Tasks list */}
       <Box display="flex" flexDirection="column" gap={2}>
 
-        {filteredTasks.length === 0 ? (
+        {tasks.length === 0 ? (
           <Typography color="text.secondary">
             אין משימות להצגה
           </Typography>
         ) : (
-          filteredTasks.map((task) => (
+          tasks.map((task) => (
             <TaskCard
               key={task.id}
               task={task}

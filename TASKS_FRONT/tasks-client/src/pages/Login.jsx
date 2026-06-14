@@ -9,18 +9,14 @@ import {
   Paper,
   Stack,
 } from "@mui/material";
-    import {
-  registerUser as registerUserThunk,
-} from "../store/userSlice";
+import { loginUser as loginUserThunk } from "../store/userSlice";
 
 const initialForm = {
-  firstName: "",
-  lastName: "",
   email: "",
   password: "",
 };
 
-function CreateUser() {
+function Login() {
   const [form, setForm] = useState(initialForm);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState(null);
@@ -36,22 +32,22 @@ function CreateUser() {
     event.preventDefault();
     setError(null);
 
-    if (!form.firstName || !form.lastName || !form.email || !form.password) {
+    if (!form.email || !form.password) {
       setError("כל השדות נדרשים.");
       return;
     }
 
     setSubmitting(true);
     try {
-      // Dispatch registration thunk
-      // This will: register user, store JWT token, store user data in Redux
-      await dispatch(registerUserThunk(form)).unwrap();
-      navigate("/users");
+      // Dispatch login thunk
+      // This will: authenticate user, store JWT token, store user data in Redux
+      await dispatch(loginUserThunk(form)).unwrap();
+      navigate("/dashboard");
     } catch (err) {
       const message =
         typeof err === 'string'
           ? err
-          : err?.message || "שגיאה ביצירת המשתמש.";
+          : err?.message || "שגיאה בהתחברות.";
       setError(message);
       console.error(err);
     } finally {
@@ -62,25 +58,11 @@ function CreateUser() {
   return (
     <Paper sx={{ p: 4, maxWidth: 600 }}>
       <Typography variant="h4" fontWeight="bold" mb={3}>
-        צור משתמש חדש
+        התחברות
       </Typography>
 
       <Box component="form" onSubmit={handleSubmit} noValidate>
         <Stack spacing={2}>
-          <TextField
-            label="שם פרטי"
-            name="firstName"
-            value={form.firstName}
-            onChange={handleChange}
-            fullWidth
-          />
-          <TextField
-            label="שם משפחה"
-            name="lastName"
-            value={form.lastName}
-            onChange={handleChange}
-            fullWidth
-          />
           <TextField
             label="אימייל"
             name="email"
@@ -103,17 +85,28 @@ function CreateUser() {
           )}
 
           <Box display="flex" justifyContent="flex-end" gap={2}>
-            <Button variant="outlined" onClick={() => navigate("/users")}>
+            <Button variant="outlined" onClick={() => navigate("/")}>
               ביטול
             </Button>
             <Button type="submit" variant="contained" disabled={submitting}>
-              {submitting ? "שולח..." : "צור משתמש"}
+              {submitting ? "שולח..." : "התחבר"}
             </Button>
           </Box>
+
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            עדיין אין לך חשבון?{" "}
+            <Button
+              size="small"
+              onClick={() => navigate("/create-user")}
+              sx={{ p: 0 }}
+            >
+              צור חשבון
+            </Button>
+          </Typography>
         </Stack>
       </Box>
     </Paper>
   );
 }
 
-export default CreateUser;
+export default Login;

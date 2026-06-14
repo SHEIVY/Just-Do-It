@@ -5,6 +5,7 @@ namespace TASKS.Services
     public interface ITaskService
     {
         Task<List<TaskItem>> GetAllTasks(int userId);
+        Task<TaskItem?> GetTaskById(int id);
         Task<PagedResult<TaskDto>> GetAllTasks_(
         string? search,
         string? status,

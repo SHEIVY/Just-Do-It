@@ -24,10 +24,13 @@ function TaskForm({
     useEffect(() => {
 
         if (initialData) {
-
             setTitle(initialData.title || "");
             setDescription(initialData.description || "");
             setStatus(initialData.status ?? 0);
+        } else {
+            setTitle("");
+            setDescription("");
+            setStatus(0);
         }
 
     }, [initialData]);

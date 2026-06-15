@@ -108,7 +108,10 @@ namespace TASKS.Controllers
             try
             {
                 var userId = GetUserIdFromToken();
+                if (updatedTask == null)
+                    return BadRequest();
 
+                updatedTask.Id = id;
                 if (id != updatedTask.Id)
                     return BadRequest(new { message = "ID mismatch." });
 

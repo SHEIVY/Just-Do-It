@@ -48,16 +48,19 @@ function TaskCard({ task, onDelete, onEdit }) {
 
     return (
         <Paper
-            elevation={2}
-            sx={{
-                p: 3,
-                borderRadius: 4,
-                transition: "0.2s",
+      elevation={0}
+      sx={{
+        p: 3,
+        borderRadius: 2,
+        backgroundColor: '#ffffff',
+        boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+        transition: 'all 0.3s ease',
+        border: '1px solid rgba(0,0,0,0.05)',
 
-                "&:hover": {
-                    transform: "translateY(-2px)",
-                },
-            }}
+        "&:hover": {
+          transform: "translateY(-4px)",
+          boxShadow: '0 8px 30px rgba(102, 126, 234, 0.2)',
+            }}}
         >
 
             <Box
